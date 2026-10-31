@@ -18,6 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         app: [backend, frontend]   # one job per app: both images are built in parallel
+        include:                   # which folder holds each app's Dockerfile
+          - app: backend
+            path: backend
+          - app: frontend
+            path: client/my-app
     steps:
       # 1. Download the code onto the temporary GitHub server
       - uses: actions/checkout@v4
@@ -44,12 +49,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5. Build the image from backend/Dockerfile or frontend/Dockerfile.
+      # 5. Build the image from the app's folder.
       #    On a push it is published; on a pull request it is only built, to prove it works.
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ${{ matrix.app }}
+          context: ${{ matrix.path }}
           platforms: ${{ github.event_name == 'push' && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
           push: ${{ github.event_name == 'push' }}
           tags: |

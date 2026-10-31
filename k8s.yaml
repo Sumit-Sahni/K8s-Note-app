@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: app
-          image: notes-backend:v1
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/sumit-sahni/notes-backend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           readinessProbe:
@@ -60,8 +60,8 @@ spec:
     spec:
       containers:
         - name: app
-          image: notes-frontend:v1
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/sumit-sahni/notes-frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           readinessProbe:
