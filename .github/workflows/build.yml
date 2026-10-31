@@ -38,7 +38,7 @@ jobs:
       # 4. Log in to GitHub's registry with the free token GitHub provides (pushes only)
       - name: Log in to GHCR
         if: github.event_name == 'push'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
