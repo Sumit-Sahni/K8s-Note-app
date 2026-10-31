@@ -1,0 +1,12 @@
+# Keeps versions fresh: GitHub opens a pull request when a newer version exists,
+# so you get the latest actions and packages without guessing version numbers.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly

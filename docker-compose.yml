@@ -1,0 +1,15 @@
+# Run both containers on your laptop with one command:
+#   docker compose up --build
+# Then open http://localhost:3000
+#
+# Inside this network the containers find each other by name:
+# the frontend reaches the backend at http://backend:3000
+
+services:
+  frontend:
+    build: ./client/my-app
+    ports:
+      - "3000:3000"     # the only port open to your browser
+
+  backend:
+    build: ./backend    # no ports: only the frontend can reach it

@@ -1,0 +1,59 @@
+name: build-and-push
+
+# Runs on every push to main (builds and publishes) and on pull requests (build check only)
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write   # allows pushing images to GitHub's registry (ghcr.io)
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [backend, frontend]   # one job per app: both images are built in parallel
+    steps:
+      # 1. Download the code onto the temporary GitHub server
+      - uses: actions/checkout@v4
+
+      # 2. Work out the image name and the tags
+      #    ghcr.io needs a lowercase name; the tag is the first 7 letters of the commit
+      - name: Image name and tags
+        id: meta
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          echo "image=ghcr.io/${owner}/notes-${{ matrix.app }}" >> "$GITHUB_OUTPUT"
+          echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      # 3. Tools to build for both Intel and Apple Silicon (arm64) laptops
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      # 4. Log in to GitHub's registry with the free token GitHub provides (pushes only)
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. Build the image from backend/Dockerfile or frontend/Dockerfile.
+      #    On a push it is published; on a pull request it is only built, to prove it works.
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.app }}
+          platforms: ${{ github.event_name == 'push' && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ${{ steps.meta.outputs.image }}:latest
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha }}
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
