@@ -52,7 +52,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <main className="mx-auto max-w-xl px-5 py-10">
-        <h1 className="text-3xl font-bold">Notes</h1>
+        <h1 className="text-3xl font-bold">Notes with Two Container's</h1>
         <p className="mb-5 mt-1 text-sm text-slate-400">
           Every click on this page sends a request to the backend container.
         </p>
