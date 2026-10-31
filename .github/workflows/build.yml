@@ -25,7 +25,7 @@ jobs:
             path: client/my-app
     steps:
       # 1. Download the code onto the temporary GitHub server
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # 2. Work out the image name and the tags
       #    ghcr.io needs a lowercase name; the tag is the first 7 letters of the commit
