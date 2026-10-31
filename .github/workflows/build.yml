@@ -32,7 +32,7 @@ jobs:
           echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
       # 3. Tools to build for both Intel and Apple Silicon (arm64) laptops
-      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-qemu-action@v4
       - uses: docker/setup-buildx-action@v3
 
       # 4. Log in to GitHub's registry with the free token GitHub provides (pushes only)
