@@ -1,6 +1,12 @@
+
+
 # Notes: a Next.js frontend and a backend, built by GitHub Actions, run on minikube
 
 The simplest real two-tier app, built to learn Docker, Kubernetes and CI/CD.
+
+
+<img width="757" height="476" alt="Screenshot 2026-11-01 at 9 35 45 PM" src="https://github.com/user-attachments/assets/54ca1cbe-3b3f-4881-9750-8b0042330fc1" />
+
 
 - **Frontend**: Next.js 16, React 19, TypeScript. A page where you add and delete notes.
 - **Backend**: a small API on Node.js 26 (plain Node, nothing to install). It stores the notes.
